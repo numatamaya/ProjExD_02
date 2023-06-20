@@ -18,12 +18,18 @@ def init_kk_images():
     (-5,0):kk_img0,#左
     (-5,-5):pg.transform.rotozoom(kk_img0,-90, 1.0),#左上
     (0,-5):pg.transform.rotozoom(kk_img,90, 1.0),#上
-    (+5,-5):pg.transform.rotozoom(kk_img,45, 1.0),
-    (+5,0):kk_img,
-    (+5,+5):pg.transform.rotozoom(kk_img,-45, 1.0),
-    (0,+5):pg.transform.rotozoom(kk_img,-90,1.0),
-    (-5,+5):pg.transform.rotozoom(kk_img0,45, 1.0)}
-def check_bound(rect):
+    (+5,-5):pg.transform.rotozoom(kk_img,45, 1.0),#右上
+    (+5,0):kk_img,#右
+    (+5,+5):pg.transform.rotozoom(kk_img,-45, 1.0),#右下
+    (0,+5):pg.transform.rotozoom(kk_img,-90,1.0),#下
+    (-5,+5):pg.transform.rotozoom(kk_img0,45, 1.0)#左下
+    }
+def check_bound(rect:pg.Rect)->tuple[bool,bool]:
+    """
+    こうかとんRect，爆弾Rectが画面外 or 画面内かを判定する関数
+    引数：こうかとんRect or 爆弾Rect
+    戻り値：横方向，縦方向の判定結果タプル（True：画面内／False：画面外）
+    """
     yoko,tate = True,True
     if rect.left < 0 or WIDTH < rect.right:
         yoko = False
