@@ -5,13 +5,24 @@ import pygame as pg
 
 WIDTH, HEIGHT = 1600, 900
 delta = {
-    pg.K_UP:(0,-5,),
+    pg.K_UP:(0,-5),
     pg.K_DOWN:(0,+5),
     pg.K_LEFT:(-5,0),
     pg.K_RIGHT:(+5,0),    
-
 }
-
+def init_kk_images():
+    kk_img0 = pg.transform.rotozoom(pg.image.load("ex02/fig/3.png"), 0, 1.0)
+    kk_img = pg.transform.flip(kk_img0, True, False)
+    return {
+    (0,0):kk_img0,  
+    (-5,0):kk_img0,#左
+    (-5,-5):pg.transform.rotozoom(kk_img0,-90, 1.0),#左上
+    (0,-5):pg.transform.rotozoom(kk_img,90, 1.0),#上
+    (+5,-5):pg.transform.rotozoom(kk_img,45, 1.0),
+    (+5,0):kk_img,
+    (+5,+5):pg.transform.rotozoom(kk_img,-45, 1.0),
+    (0,+5):pg.transform.rotozoom(kk_img,-90,1.0),
+    (-5,+5):pg.transform.rotozoom(kk_img0,45, 1.0)}
 def check_bound(rect):
     yoko,tate = True,True
     if rect.left < 0 or WIDTH < rect.right:
@@ -26,6 +37,9 @@ def main():
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
+    kk_imgss = init_kk_images()
+    kk_img = kk_imgss[(0, 0)]
+
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900,400
     clock = pg.time.Clock()
@@ -37,12 +51,9 @@ def main():
     y = random.randint(0,HEIGHT)
     bd_rct = bd_img.get_rect()
     bd_rct.center = x,y
-    
-        
+     
     vx,vy = +5,+5
     
-   
-
     tmr = 0
     while True:
         for event in pg.event.get():
@@ -59,9 +70,11 @@ def main():
             if key_lst[k]:
                 sum_mv[0] += mv[0]
                 sum_mv[1] += mv[1]
+        
         kk_rct.move_ip(sum_mv)
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
+        kk_img = kk_imgss[tuple(sum_mv)]
 
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, kk_rct)
@@ -75,8 +88,6 @@ def main():
         pg.display.update()
         tmr += 1
         clock.tick(50)
-
-
 
 if __name__ == "__main__":
     pg.init()
