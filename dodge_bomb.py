@@ -50,6 +50,9 @@ def main():
                 return
         
        # bd_rct.center = 300,200
+        if kk_rct.colliderect(bd_rct):  # 練習５
+            print("ゲームオーバー")
+            return   # ゲームオーバー 
         key_lst = pg.key.get_pressed()
         sum_mv = [0,0]
         for k, mv in delta.items():
